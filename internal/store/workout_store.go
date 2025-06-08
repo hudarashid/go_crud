@@ -6,12 +6,12 @@ import (
 )
 
 type Workout struct {
-	ID              int             `json:"id"`
-	Title           string          `json:"title"`
-	Description     string          `json:"description"`
-	DurationMinutes int             `json:"duration_minutes"`
-	CaloriesBurned  int             `json:"calories_burned"`
-	Entries         []*WorkoutEntry `json:"entries"`
+	ID              int            `json:"id"`
+	Title           string         `json:"title"`
+	Description     string         `json:"description"`
+	DurationMinutes int            `json:"duration_minutes"`
+	CaloriesBurned  int            `json:"calories_burned"`
+	Entries         []WorkoutEntry `json:"entries"`
 }
 
 type WorkoutEntry struct {
@@ -56,14 +56,14 @@ func (pg *PostgresWorkoutStore) CreateWorkout(workout *Workout) (*Workout, error
 	}
 
 	// Insert the entries
-	for _, entry := range workout.Entries {
+	for i, entry := range workout.Entries {
 		query := `
     		INSERT INTO workout_entries (workout_id, exercise_name, sets, reps, duration_seconds, weight, notes, order_index)
     		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
     		RETURNING id
     		`
-		err = tx.QueryRow(query, workout.ID, entry.ExerciseName, entry.Sets, entry.Reps, entry.DurationSeconds, entry.Weight, entry.Notes, entry.OrderIndex).Scan(&entry.ID)
-		fmt.Printf("entry id: %d\n", entry.ID)
+		err = tx.QueryRow(query, workout.ID, entry.ExerciseName, entry.Sets, entry.Reps, entry.DurationSeconds, entry.Weight, entry.Notes, entry.OrderIndex).Scan(&workout.Entries[i].ID)
+		fmt.Printf("entry id: %d\n", workout.Entries[i].ID)
 
 		if err != nil {
 			return nil, err
