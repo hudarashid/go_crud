@@ -91,6 +91,7 @@ func (s *PostgresUserStore) GetUserByUsername(username string) (*User, error) {
 		&user.ID,
 		&user.Username,
 		&user.Email,
+		&user.PasswordHash.hash,
 		&user.Bio,
 		&user.CreatedAt,
 		&user.UpdatedAt,
