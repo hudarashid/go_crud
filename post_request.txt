@@ -76,3 +76,49 @@ curl -X POST http://localhost:8080/tokens/authentication \
     "username": "jack_doe",
     "password": "securepassword123"
 }'
+
+
+
+
+
+
+curl -X POST "http://localhost:8080/workouts" \
+     -H "Authorization: Bearer KCI42CWNH7A3N43QOBLYXXWVRBDUL7QVWI5JHEPNNBG5QZIVEHHA" \
+     -H "Content-Type: application/json" \
+     -d '{
+          "title": "Morning Cardio",
+          "description": "A light 30-minute jog to start the day.",
+          "duration_minutes": 30,
+          "calories_burned": 300,
+          "entries": [
+              {
+                  "exercise_name": "Jogging",
+                  "sets": 1,
+                  "duration_seconds": 1800,
+                  "weight": 0,
+                  "notes": "Maintain a steady pace",
+                  "order_index": 1
+              }
+          ]
+        }'
+        
+
+curl -X PUT "http://localhost:8080/workouts/6" \
+     -H "Authorization: Bearer KCI42CWNH7A3N43QOBLYXXWVRBDUL7QVWI5JHEPNNBG5QZIVEHHA" \
+     -H "Content-Type: application/json" \
+     -d '{
+          "title": "Updated Cardio",
+          "description": "A relaxed 45-minute walk after dinner.",
+          "duration_minutes": 45,
+          "calories_burned": 250,
+          "entries": [
+              {
+                  "exercise_name": "Walking",
+                  "sets": 1,
+                  "duration_seconds": 2700,
+                  "weight": 0,
+                  "notes": "Keep a steady pace",
+                  "order_index": 1
+              }
+          ]
+        }'

@@ -67,7 +67,6 @@ func (um *UserMiddleware) Authenticate(next http.Handler) http.Handler {
 
 		r = SetUser(r, user)
 		next.ServeHTTP(w, r)
-		return
 	})
 }
 
@@ -79,5 +78,6 @@ func (um *UserMiddleware) RequireUser(next http.HandlerFunc) http.HandlerFunc {
 			utils.WriteJSON(w, http.StatusUnauthorized, utils.Envelope{"error": "you must be logged in to access this route"})
 			return
 		}
+		next.ServeHTTP(w, r)
 	})
 }
