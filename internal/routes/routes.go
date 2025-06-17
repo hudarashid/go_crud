@@ -8,13 +8,17 @@ import (
 func SetupRoutes(app *app.Application) *chi.Mux {
 	r := chi.NewRouter()
 
+	r.Group(func(r chi.Router) {
+		r.Use(app.Middleware.Authenticate)
+		r.Get("/workouts/{id}", app.Middleware.RequireUser(app.WorkoutHandler.HandlerGetWorkoutByID))
+		r.Post("/workouts", app.Middleware.RequireUser(app.WorkoutHandler.HandlerCreateWorkout))
+		r.Put("/workouts/{id}", app.Middleware.RequireUser(app.WorkoutHandler.HandleUpdateWorkoutByID))
+		r.Delete("/workouts/{id}", app.Middleware.RequireUser(app.WorkoutHandler.DeleteWorkoutByID))
+
+	})
+
 	// Function in Go is first class citizen, i.e can pass function as variable 'HealthCheck'
 	r.Get("/health", app.HealthCheck)
-	r.Get("/workouts/{id}", app.WorkoutHandler.HandlerGetWorkoutByID)
-	r.Post("/workouts", app.WorkoutHandler.HandlerCreateWorkout)
-	r.Put("/workouts/{id}", app.WorkoutHandler.HandleUpdateWorkoutByID)
-	r.Delete("/workouts/{id}", app.WorkoutHandler.DeleteWorkoutByID)
-
 	r.Post("/users", app.UserHandler.HandleRegisterUser)
 	r.Post("/tokens/authentication", app.TokenHandler.HandleCreateToken)
 	return r
